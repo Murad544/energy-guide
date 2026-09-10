@@ -1,14 +1,19 @@
 import "server-only";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
+
+const resources = db.orm.public.Resource;
 
 export const resourcesService = {
   listByCategory: (category: string) =>
-    prisma.resource.findMany({
-      where: { category },
-      orderBy: { position: "asc" },
-    }),
+    resources
+      .where({ category })
+      .orderBy((resource) => resource.position.asc())
+      .all(),
   listAll: () =>
-    prisma.resource.findMany({
-      orderBy: [{ category: "asc" }, { position: "asc" }],
-    }),
+    resources
+      .orderBy([
+        (resource) => resource.category.asc(),
+        (resource) => resource.position.asc(),
+      ])
+      .all(),
 };

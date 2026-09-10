@@ -1,0 +1,643 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.BatteryType",
+    "label": "Create table \"BatteryType\"",
+    "summary": "Creates table \"BatteryType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BatteryType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BatteryType\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BatteryType\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BatteryType\"",
+        "sql": "CREATE TABLE \"public\".\"BatteryType\" (\n  \"dod\" float8 NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  CONSTRAINT \"BatteryType_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BatteryType\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BatteryType\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Lesson",
+    "label": "Create table \"Lesson\"",
+    "summary": "Creates table \"Lesson\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Lesson"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Lesson\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Lesson\"",
+        "sql": "CREATE TABLE \"public\".\"Lesson\" (\n  \"category\" text,\n  \"contentJson\" json NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"intro\" text,\n  \"number\" int4 NOT NULL,\n  \"published\" bool DEFAULT false NOT NULL,\n  \"slug\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  CONSTRAINT \"Lesson_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Lesson\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.News",
+    "label": "Create table \"News\"",
+    "summary": "Creates table \"News\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "News"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"News\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"News\"",
+        "sql": "CREATE TABLE \"public\".\"News\" (\n  \"contentJson\" json NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"excerpt\" text,\n  \"id\" text NOT NULL,\n  \"published\" bool DEFAULT false NOT NULL,\n  \"publishedAt\" timestamp(3),\n  \"slug\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  CONSTRAINT \"News_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"News\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.PanelSpec",
+    "label": "Create table \"PanelSpec\"",
+    "summary": "Creates table \"PanelSpec\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "PanelSpec"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"PanelSpec\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PanelSpec\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"PanelSpec\"",
+        "sql": "CREATE TABLE \"public\".\"PanelSpec\" (\n  \"id\" text NOT NULL,\n  \"watts\" int4 NOT NULL,\n  CONSTRAINT \"PanelSpec_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"PanelSpec\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PanelSpec\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Region",
+    "label": "Create table \"Region\"",
+    "summary": "Creates table \"Region\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Region"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Region\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Region\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Region\"",
+        "sql": "CREATE TABLE \"public\".\"Region\" (\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"peakSunHours\" float8 NOT NULL,\n  CONSTRAINT \"Region_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Region\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Region\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.Resource",
+    "label": "Create table \"Resource\"",
+    "summary": "Creates table \"Resource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Resource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Resource\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Resource\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Resource\"",
+        "sql": "CREATE TABLE \"public\".\"Resource\" (\n  \"category\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"position\" int4 DEFAULT 0 NOT NULL,\n  \"source\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"url\" text NOT NULL,\n  CONSTRAINT \"Resource_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Resource\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Resource\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.RoofOrientation",
+    "label": "Create table \"RoofOrientation\"",
+    "summary": "Creates table \"RoofOrientation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "RoofOrientation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"RoofOrientation\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"RoofOrientation\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"RoofOrientation\"",
+        "sql": "CREATE TABLE \"public\".\"RoofOrientation\" (\n  \"factor\" float8 NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  CONSTRAINT \"RoofOrientation_pkey\" PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"RoofOrientation\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"RoofOrientation\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.BatteryType.BatteryType_name_key",
+    "label": "Create index \"BatteryType_name_key\" on \"BatteryType\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BatteryType_name_key",
+        "table": "BatteryType"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BatteryType_name_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BatteryType_name_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BatteryType_name_key\"",
+        "sql": "CREATE UNIQUE INDEX \"BatteryType_name_key\" ON \"public\".\"BatteryType\" (\"name\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BatteryType_name_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BatteryType_name_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Lesson.Lesson_category_number_idx",
+    "label": "Create index \"Lesson_category_number_idx\" on \"Lesson\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Lesson_category_number_idx",
+        "table": "Lesson"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Lesson_category_number_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson_category_number_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Lesson_category_number_idx\"",
+        "sql": "CREATE INDEX \"Lesson_category_number_idx\" ON \"public\".\"Lesson\" (\"category\", \"number\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Lesson_category_number_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson_category_number_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Lesson.Lesson_slug_key",
+    "label": "Create index \"Lesson_slug_key\" on \"Lesson\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Lesson_slug_key",
+        "table": "Lesson"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Lesson_slug_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson_slug_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Lesson_slug_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Lesson_slug_key\" ON \"public\".\"Lesson\" (\"slug\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Lesson_slug_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Lesson_slug_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.News.News_published_publishedAt_idx",
+    "label": "Create index \"News_published_publishedAt_idx\" on \"News\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "News_published_publishedAt_idx",
+        "table": "News"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"News_published_publishedAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News_published_publishedAt_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"News_published_publishedAt_idx\"",
+        "sql": "CREATE INDEX \"News_published_publishedAt_idx\" ON \"public\".\"News\" (\"published\", \"publishedAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"News_published_publishedAt_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News_published_publishedAt_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.News.News_slug_key",
+    "label": "Create index \"News_slug_key\" on \"News\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "News_slug_key",
+        "table": "News"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"News_slug_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News_slug_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"News_slug_key\"",
+        "sql": "CREATE UNIQUE INDEX \"News_slug_key\" ON \"public\".\"News\" (\"slug\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"News_slug_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"News_slug_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.PanelSpec.PanelSpec_watts_key",
+    "label": "Create index \"PanelSpec_watts_key\" on \"PanelSpec\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "PanelSpec_watts_key",
+        "table": "PanelSpec"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"PanelSpec_watts_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PanelSpec_watts_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"PanelSpec_watts_key\"",
+        "sql": "CREATE UNIQUE INDEX \"PanelSpec_watts_key\" ON \"public\".\"PanelSpec\" (\"watts\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"PanelSpec_watts_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"PanelSpec_watts_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Region.Region_name_key",
+    "label": "Create index \"Region_name_key\" on \"Region\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Region_name_key",
+        "table": "Region"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Region_name_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Region_name_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Region_name_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Region_name_key\" ON \"public\".\"Region\" (\"name\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Region_name_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Region_name_key\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Resource.Resource_category_position_idx",
+    "label": "Create index \"Resource_category_position_idx\" on \"Resource\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Resource_category_position_idx",
+        "table": "Resource"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Resource_category_position_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Resource_category_position_idx\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Resource_category_position_idx\"",
+        "sql": "CREATE INDEX \"Resource_category_position_idx\" ON \"public\".\"Resource\" (\"category\", \"position\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Resource_category_position_idx\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Resource_category_position_idx\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.RoofOrientation.RoofOrientation_name_key",
+    "label": "Create index \"RoofOrientation_name_key\" on \"RoofOrientation\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "RoofOrientation_name_key",
+        "table": "RoofOrientation"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"RoofOrientation_name_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"RoofOrientation_name_key\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"RoofOrientation_name_key\"",
+        "sql": "CREATE UNIQUE INDEX \"RoofOrientation_name_key\" ON \"public\".\"RoofOrientation\" (\"name\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"RoofOrientation_name_key\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"RoofOrientation_name_key\""
+        ]
+      }
+    ]
+  }
+]

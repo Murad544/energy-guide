@@ -1,21 +1,29 @@
 import "server-only";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/lib/prisma";
+import type { FieldInputTypes, FieldOutputTypes } from "@/prisma/contract.d";
+
+const news = db.orm.public.News;
+type NewsData = Pick<
+  FieldInputTypes["public"]["News"],
+  "slug" | "title" | "excerpt" | "contentJson" | "published"
+> & {
+  publishedAt: FieldOutputTypes["public"]["News"]["publishedAt"];
+};
 
 export const newsService = {
   listPublished: () =>
-    prisma.news.findMany({
-      where: { published: true },
-      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-    }),
+    news
+      .where({ published: true })
+      .orderBy([
+        (article) => article.publishedAt.desc(),
+        (article) => article.createdAt.desc(),
+      ])
+      .all(),
   findPublishedBySlug: (slug: string) =>
-    prisma.news.findFirst({ where: { slug, published: true } }),
-  findById: (id: string) => prisma.news.findUnique({ where: { id } }),
-  listAll: () => prisma.news.findMany({ orderBy: { updatedAt: "desc" } }),
-  create: (data: Parameters<typeof prisma.news.create>[0]["data"]) =>
-    prisma.news.create({ data }),
-  update: (
-    id: string,
-    data: Parameters<typeof prisma.news.update>[0]["data"],
-  ) => prisma.news.update({ where: { id }, data }),
-  delete: (id: string) => prisma.news.delete({ where: { id } }),
+    news.where({ slug, published: true }).first(),
+  findById: (id: string) => news.first({ id }),
+  listAll: () => news.orderBy((article) => article.updatedAt.desc()).all(),
+  create: (data: NewsData) => news.create(data),
+  update: (id: string, data: NewsData) => news.where({ id }).update(data),
+  delete: (id: string) => news.where({ id }).delete(),
 };

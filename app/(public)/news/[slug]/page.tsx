@@ -15,7 +15,9 @@ export default async function NewsArticlePage({
   return (
     <article className="mx-auto max-w-3xl px-5 py-16 md:py-24">
       <time className="text-sm font-semibold uppercase tracking-[.2em] text-copper">
-        {(article.publishedAt ?? article.createdAt).toLocaleDateString("az-AZ")}
+        {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString(
+          "az-AZ",
+        )}
       </time>
       <h1 className="mt-5 font-serif text-5xl tracking-[-0.03em] md:text-7xl">
         {article.title}

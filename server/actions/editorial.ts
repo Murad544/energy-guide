@@ -1,6 +1,6 @@
 "use server";
 
-import type { Prisma } from "@prisma/client";
+import type { FieldInputTypes, FieldOutputTypes } from "@/prisma/contract.d";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -53,8 +53,20 @@ function fields(formData: FormData) {
   };
 }
 
-function parseContent(value: string): Prisma.InputJsonValue {
-  return Content.parse(JSON.parse(value)) as Prisma.InputJsonValue;
+function parseContent(
+  value: string,
+): FieldInputTypes["public"]["Lesson"]["contentJson"] {
+  return Content.parse(
+    JSON.parse(value),
+  ) as unknown as FieldInputTypes["public"]["Lesson"]["contentJson"];
+}
+
+function nowTimestamp(): NonNullable<
+  FieldOutputTypes["public"]["News"]["publishedAt"]
+> {
+  return new Date().toISOString() as NonNullable<
+    FieldOutputTypes["public"]["News"]["publishedAt"]
+  >;
 }
 
 function failure(error: unknown): ActionResult {
@@ -76,7 +88,8 @@ function failure(error: unknown): ActionResult {
     typeof error === "object" &&
     error &&
     "code" in error &&
-    error.code === "P2002"
+    (error.code === "P2002" ||
+      ("sqlState" in error && error.sqlState === "23505"))
   )
     return {
       ok: false,
@@ -166,7 +179,7 @@ export async function createNewsAction(
       excerpt: input.excerpt || null,
       contentJson: parseContent(input.contentJson),
       published: input.published,
-      publishedAt: input.published ? new Date() : null,
+      publishedAt: input.published ? nowTimestamp() : null,
     });
   } catch (error) {
     return failure(error);
@@ -196,7 +209,9 @@ export async function updateNewsAction(
       excerpt: input.excerpt || null,
       contentJson: parseContent(input.contentJson),
       published: input.published,
-      publishedAt: input.published ? (current.publishedAt ?? new Date()) : null,
+      publishedAt: input.published
+        ? (current.publishedAt ?? nowTimestamp())
+        : null,
     });
   } catch (error) {
     return failure(error);

@@ -8,6 +8,18 @@ Azərbaycan dilində günəş enerjisi üzrə dərslər, mühəndislik hesablay�
 2. Run `pnpm db:up`, `pnpm db:generate`, `pnpm db:migrate`, then `pnpm db:seed`.
 3. Start the app with `pnpm dev`.
 
+Prisma 8 uses `prisma/contract.prisma` as the database contract. Use
+`pnpm db:update` while developing after changing the contract. For a reviewed
+migration, run `pnpm db:migration:plan --name <migration-name>` and then
+`pnpm db:migrate`. `pnpm db:verify` checks whether the database matches the
+contract. Use `pnpm db:init` only to adopt an existing database that already
+contains the contract's tables, such as a database created by Prisma 6.
+
+To deploy the app and its managed Prisma Postgres database to Prisma Compute,
+run `pnpm exec prisma auth login` once and then `pnpm deploy:prisma`. In CI,
+provide `PRISMA_SERVICE_TOKEN` and `PRISMA_WORKSPACE_ID` instead of using an
+interactive login.
+
 The public site is available at `/`; the single-account admin panel starts at `/login`.
 
 ## Getting Started

@@ -19,9 +19,9 @@ export default async function NewsPage() {
               key={article.id}
             >
               <time className="text-sm uppercase tracking-[.15em] text-copper">
-                {(article.publishedAt ?? article.createdAt).toLocaleDateString(
-                  "az-AZ",
-                )}
+                {new Date(
+                  article.publishedAt ?? article.createdAt,
+                ).toLocaleDateString("az-AZ")}
               </time>
               <h2 className="mt-4 font-serif text-3xl group-hover:underline">
                 {article.title}

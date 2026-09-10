@@ -34,7 +34,7 @@ export default async function NewsAdminPage() {
                 <strong>{article.title}</strong>
                 <span className="mt-1 block text-sm text-ink-soft">
                   /{article.slug} ·{" "}
-                  {article.updatedAt.toLocaleDateString("az-AZ")}
+                  {new Date(article.updatedAt).toLocaleDateString("az-AZ")}
                 </span>
               </div>
               <span

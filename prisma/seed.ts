@@ -1,6 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import { db } from "@/lib/prisma";
+import type { FieldOutputTypes } from "@/prisma/contract.d";
 
-const prisma = new PrismaClient();
+const orm = db.orm.public;
+const publishedAt = new Date().toISOString() as NonNullable<
+  FieldOutputTypes["public"]["News"]["publishedAt"]
+>;
+
 const lessons = [
   [
     "pv",
@@ -47,10 +52,15 @@ const lessons = [
 
 async function main() {
   for (const [index, [slug, title, intro]] of lessons.entries()) {
-    await prisma.lesson.upsert({
-      where: { slug },
-      update: { number: index + 1, title, intro },
-      create: {
+    const existing = await orm.Lesson.where({ slug }).first();
+    if (existing) {
+      await orm.Lesson.where({ id: existing.id }).update({
+        number: index + 1,
+        title,
+        intro,
+      });
+    } else {
+      await orm.Lesson.create({
         slug,
         number: index + 1,
         category: "lesson",
@@ -63,19 +73,20 @@ async function main() {
             { type: "paragraph", content: [{ type: "text", text: intro }] },
           ],
         },
-      },
-    });
+      });
+    }
   }
-  await prisma.news.upsert({
-    where: { slug: "azerbaycanda-gunes-enerjisi" },
-    update: {},
-    create: {
-      slug: "azerbaycanda-gunes-enerjisi",
+
+  const newsSlug = "azerbaycanda-gunes-enerjisi";
+  const existingNews = await orm.News.where({ slug: newsSlug }).first();
+  if (!existingNews) {
+    await orm.News.create({
+      slug: newsSlug,
       title: "Azərbaycanda günəş enerjisinə giriş",
       excerpt:
         "Günəş enerjisinin yerli imkanları və gündəlik istifadəsi haqqında qısa icmal.",
       published: true,
-      publishedAt: new Date(),
+      publishedAt,
       contentJson: {
         type: "doc",
         content: [
@@ -90,8 +101,9 @@ async function main() {
           },
         ],
       },
-    },
-  });
+    });
+  }
+
   const regions = [
     ["Bakı/Abşeron", 4.5],
     ["Naxçıvan", 5.2],
@@ -99,71 +111,77 @@ async function main() {
     ["Şəki-Zaqatala", 3.9],
     ["Lənkəran", 3.7],
   ] as const;
-  for (const [name, peakSunHours] of regions)
-    await prisma.region.upsert({
-      where: { name },
-      update: { peakSunHours },
-      create: { name, peakSunHours },
-    });
-  for (const watts of [400, 450, 550])
-    await prisma.panelSpec.upsert({
-      where: { watts },
-      update: {},
-      create: { watts },
-    });
+  for (const [name, peakSunHours] of regions) {
+    const existing = await orm.Region.where({ name }).first();
+    if (existing)
+      await orm.Region.where({ id: existing.id }).update({ peakSunHours });
+    else await orm.Region.create({ name, peakSunHours });
+  }
+
+  for (const watts of [400, 450, 550]) {
+    const existing = await orm.PanelSpec.where({ watts }).first();
+    if (!existing) await orm.PanelSpec.create({ watts });
+  }
+
   for (const item of [
     { name: "Lead-acid", dod: 0.5 },
     { name: "LiFePO4", dod: 0.85 },
-  ])
-    await prisma.batteryType.upsert({
-      where: { name: item.name },
-      update: { dod: item.dod },
-      create: item,
-    });
+  ]) {
+    const existing = await orm.BatteryType.where({ name: item.name }).first();
+    if (existing)
+      await orm.BatteryType.where({ id: existing.id }).update({
+        dod: item.dod,
+      });
+    else await orm.BatteryType.create(item);
+  }
+
   for (const item of [
     { name: "Cənub", factor: 1 },
     { name: "Şərq", factor: 0.9 },
     { name: "Qərb", factor: 0.9 },
     { name: "Şimal", factor: 0.7 },
-  ])
-    await prisma.roofOrientation.upsert({
-      where: { name: item.name },
-      update: { factor: item.factor },
-      create: item,
-    });
-  await prisma.resource.deleteMany();
-  await prisma.resource.createMany({
-    data: [
-      {
-        category: "az",
-        title: "Energetika Nazirliyi",
-        source: "minenergy.gov.az",
-        url: "https://minenergy.gov.az/",
-        position: 1,
-      },
-      {
-        category: "world",
-        title: "Beynəlxalq Bərpa Olunan Enerji Agentliyi",
-        source: "irena.org",
-        url: "https://www.irena.org/",
-        position: 1,
-      },
-      {
-        category: "tech",
-        title: "PV sistemləri üzrə NREL araşdırmaları",
-        source: "nrel.gov",
-        url: "https://www.nrel.gov/solar/",
-        position: 1,
-      },
-      {
-        category: "market",
-        title: "Günəş enerjisi bazar icmalları",
-        source: "iea.org",
-        url: "https://www.iea.org/energy-system/renewables/solar-pv",
-        position: 1,
-      },
-    ],
-  });
+  ]) {
+    const existing = await orm.RoofOrientation.where({
+      name: item.name,
+    }).first();
+    if (existing)
+      await orm.RoofOrientation.where({ id: existing.id }).update({
+        factor: item.factor,
+      });
+    else await orm.RoofOrientation.create(item);
+  }
+
+  await orm.Resource.where((resource) => resource.id.isNotNull()).deleteAll();
+  await orm.Resource.createAll([
+    {
+      category: "az",
+      title: "Energetika Nazirliyi",
+      source: "minenergy.gov.az",
+      url: "https://minenergy.gov.az/",
+      position: 1,
+    },
+    {
+      category: "world",
+      title: "Beynəlxalq Bərpa Olunan Enerji Agentliyi",
+      source: "irena.org",
+      url: "https://www.irena.org/",
+      position: 1,
+    },
+    {
+      category: "tech",
+      title: "PV sistemləri üzrə NREL araşdırmaları",
+      source: "nrel.gov",
+      url: "https://www.nrel.gov/solar/",
+      position: 1,
+    },
+    {
+      category: "market",
+      title: "Günəş enerjisi bazar icmalları",
+      source: "iea.org",
+      url: "https://www.iea.org/energy-system/renewables/solar-pv",
+      position: 1,
+    },
+  ]);
 }
 
-main().finally(async () => prisma.$disconnect());
+main().finally(async () => db.close());

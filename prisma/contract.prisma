@@ -1,0 +1,81 @@
+// use prisma-next
+model Lesson {
+  id          String                                                               @id(map: "Lesson_pkey") @default(uuid())
+  slug        String
+  number      Int
+  category    String?
+  title       String
+  intro       String?
+  contentJson Json
+  published   Boolean                                                              @default(false)
+  createdAt   TimestampString(3)                                                   @default(now())
+  updatedAt   temporal.timestampString(precision: 3, onCreate: now, onUpdate: now)
+
+  @@index([slug], map: "Lesson_slug_key", unique: true)
+  @@index([category, number], map: "Lesson_category_number_idx")
+  @@map("Lesson")
+}
+
+model News {
+  id          String                                                               @id(map: "News_pkey") @default(uuid())
+  slug        String
+  title       String
+  excerpt     String?
+  contentJson Json
+  published   Boolean                                                              @default(false)
+  publishedAt TimestampString(3)?
+  createdAt   TimestampString(3)                                                   @default(now())
+  updatedAt   temporal.timestampString(precision: 3, onCreate: now, onUpdate: now)
+
+  @@index([slug], map: "News_slug_key", unique: true)
+  @@index([published, publishedAt], map: "News_published_publishedAt_idx")
+  @@map("News")
+}
+
+model Resource {
+  id        String             @id(map: "Resource_pkey") @default(uuid())
+  category  String
+  title     String
+  url       String
+  source    String
+  position  Int                @default(0)
+  createdAt TimestampString(3) @default(now())
+
+  @@index([category, position], map: "Resource_category_position_idx")
+  @@map("Resource")
+}
+
+model Region {
+  id           String @id(map: "Region_pkey") @default(uuid())
+  name         String
+  peakSunHours Float
+
+  @@index([name], map: "Region_name_key", unique: true)
+  @@map("Region")
+}
+
+model PanelSpec {
+  id    String @id(map: "PanelSpec_pkey") @default(uuid())
+  watts Int
+
+  @@index([watts], map: "PanelSpec_watts_key", unique: true)
+  @@map("PanelSpec")
+}
+
+model BatteryType {
+  id   String @id(map: "BatteryType_pkey") @default(uuid())
+  name String
+  dod  Float
+
+  @@index([name], map: "BatteryType_name_key", unique: true)
+  @@map("BatteryType")
+}
+
+model RoofOrientation {
+  id     String @id(map: "RoofOrientation_pkey") @default(uuid())
+  name   String
+  factor Float
+
+  @@index([name], map: "RoofOrientation_name_key", unique: true)
+  @@map("RoofOrientation")
+}

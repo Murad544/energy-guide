@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  number      Int
+  category    String?
+  title       String
+  intro       String?
+  contentJson Json
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, number])
+}
+
+model News {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String?
+  contentJson Json
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([published, publishedAt])
+}
+
+model Resource {
+  id        String   @id @default(cuid())
+  category  String
+  title     String
+  url       String
+  source    String
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([category, position])
+}
+
+model Region {
+  id           String @id @default(cuid())
+  name         String @unique
+  peakSunHours Float
+}
+
+model PanelSpec {
+  id    String @id @default(cuid())
+  watts Int    @unique
+}
+
+model BatteryType {
+  id   String @id @default(cuid())
+  name String @unique
+  dod  Float
+}
+
+model RoofOrientation {
+  id     String @id @default(cuid())
+  name   String @unique
+  factor Float
+}

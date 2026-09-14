@@ -1,5 +1,12 @@
-import { db } from "@/lib/prisma";
-import type { FieldOutputTypes } from "@/prisma/contract.d";
+import "dotenv/config";
+import postgres from "@prisma/orm-postgres/runtime";
+import type { Contract, FieldOutputTypes } from "@/prisma/contract.d";
+import contractJson from "@/prisma/contract.json" with { type: "json" };
+
+const db = postgres<Contract>({
+  contractJson,
+  url: process.env.DATABASE_URL,
+});
 
 const orm = db.orm.public;
 const publishedAt = new Date().toISOString() as NonNullable<
@@ -184,4 +191,16 @@ async function main() {
   ]);
 }
 
-main().finally(async () => db.close());
+async function run() {
+  await db.connect();
+  try {
+    await main();
+  } finally {
+    await db.close();
+  }
+}
+
+run().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

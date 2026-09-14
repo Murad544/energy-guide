@@ -40,6 +40,13 @@ yarn-error.log*
 # prisma composer
 .prisma-composer/
 
+# prisma-generated coding-agent skills
+/.agents/skills/prisma-*/
+/.claude/skills/prisma-*/
+/.cursor/skills/prisma-*/
+/.devin/skills/prisma-*/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.prisma/

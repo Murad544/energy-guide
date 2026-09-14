@@ -1,9 +1,9 @@
-import { LessonSection } from "@/components/knowledge/lesson-section";
-import { PageHeading } from "@/components/layout/page-heading";
-import { siteCopy } from "@/lib/copy/az";
-import { getPublishedLessons } from "@/server/queries/lessons";
+import { LessonSection } from '@/components/knowledge/lesson-section';
+import { PageHeading } from '@/components/layout/page-heading';
+import { siteCopy } from '@/lib/copy/az';
+import { getPublishedLessons } from '@/server/queries/lessons';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export default async function KnowledgePage() {
   const lessons = await getPublishedLessons();
@@ -14,11 +14,11 @@ export default async function KnowledgePage() {
         title={siteCopy.knowledge.title}
         lede={siteCopy.knowledge.lede}
       />
-      <section className="mx-auto max-w-5xl px-5 py-16 md:px-10">
+      <section className='mx-auto max-w-5xl px-5 py-16 md:px-10'>
         {lessons.length ? (
           lessons.map((lesson) => (
             <LessonSection
-              intro={lesson.intro ?? ""}
+              intro={lesson.intro ?? ''}
               key={lesson.id}
               number={lesson.number}
               slug={lesson.slug}
@@ -26,7 +26,7 @@ export default async function KnowledgePage() {
             />
           ))
         ) : (
-          <p className="py-12 text-center text-ink-soft">
+          <p className='py-12 text-center text-ink-soft'>
             Hazırda nəşr edilmiş dərs yoxdur.
           </p>
         )}

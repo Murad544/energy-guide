@@ -3,15 +3,15 @@ name: Daily Solar News Scraper
 on:
   schedule:
     # Runs every day at 06:00 UTC (10:00 Baku time)
-    - cron: "0 6 * * *"
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       count:
-        description: "Number of articles to scrape"
+        description: 'Number of articles to scrape'
         required: false
-        default: "3"
+        default: '10'
       dry_run:
-        description: "Dry run (test without saving to DB)"
+        description: 'Dry run (test without saving to DB)'
         type: boolean
         required: false
         default: false
@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -46,7 +46,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          FLAGS="--count=${{ github.event.inputs.count || '3' }}"
+          FLAGS="--count=${{ github.event.inputs.count || '10' }}"
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             FLAGS="$FLAGS --dry-run"
           fi

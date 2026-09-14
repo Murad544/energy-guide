@@ -12,11 +12,52 @@ export interface ScrapeOptions {
 }
 
 /**
+ * Strips tracking query params and normalizes URL for accurate deduplication.
+ */
+function normalizeUrl(rawUrl: string): string {
+  try {
+    const u = new URL(rawUrl);
+    u.searchParams.delete("utm_source");
+    u.searchParams.delete("utm_medium");
+    u.searchParams.delete("utm_campaign");
+    u.searchParams.delete("utm_term");
+    u.searchParams.delete("utm_content");
+    return `${u.origin}${u.pathname.replace(/\/+$/, "")}`.toLowerCase();
+  } catch {
+    return rawUrl.trim().toLowerCase().replace(/\/+$/, "");
+  }
+}
+
+/**
+ * Extracts all original source URLs already saved in existing articles' contentJson.
+ */
+function extractExistingSourceUrls(articles: Array<{ contentJson: unknown }>): Set<string> {
+  const set = new Set<string>();
+  for (const article of articles) {
+    try {
+      const jsonStr =
+        typeof article.contentJson === "string"
+          ? article.contentJson
+          : JSON.stringify(article.contentJson);
+
+      const matches = jsonStr.matchAll(/"href":\s*"([^"]+)"/g);
+      for (const m of matches) {
+        if (m[1]) set.add(normalizeUrl(m[1]));
+      }
+    } catch {
+      // ignore
+    }
+  }
+  return set;
+}
+
+/**
  * Runs the scraper pipeline:
  * 1. Fetches recent solar articles from English RSS feeds.
- * 2. Filters out articles that already exist in the database.
- * 3. Translates and formats up to `limit` (default 3) articles into Azerbaijani.
- * 4. Inserts them into the News table as DRAFTS (published: false, publishedAt: null).
+ * 2. Filters out articles that already exist in the database (by source URL).
+ * 3. Sorts candidate articles by publication date (newest first).
+ * 4. Translates and formats up to `limit` (default 3) articles into Azerbaijani.
+ * 5. Inserts them into the News table as DRAFTS (published: false, publishedAt: null).
  */
 export async function runNewsScraper(options: ScrapeOptions = {}): Promise<ScraperResult> {
   const limit = options.limit ?? 3;
@@ -37,26 +78,35 @@ export async function runNewsScraper(options: ScrapeOptions = {}): Promise<Scrap
     };
   }
 
-  // 2. Query recent existing news to prevent duplicates
+  // 2. Query existing news to extract previously saved source URLs
   const existingArticles = await db.orm.public.News
     .orderBy((a) => a.createdAt.desc())
     .all();
 
-  const existingTitles = new Set(
-    existingArticles.map((a) => a.title.toLowerCase().trim())
-  );
+  const existingSourceUrls = extractExistingSourceUrls(existingArticles);
   const existingSlugs = new Set(existingArticles.map((a) => a.slug));
+  console.log(`[Scraper] Found ${existingSourceUrls.size} existing source URLs in database.`);
 
-  // 3. Filter candidates
-  const candidates = rawArticles.filter((item) => {
+  // 3. Filter candidates by source URL (guarantees no repeats)
+  const freshCandidates = rawArticles.filter((item) => {
     if (options.force) return true;
-    const titleLower = item.title.toLowerCase().trim();
-    // Skip if exact title was already inserted
-    if (existingTitles.has(titleLower)) return false;
+    const normUrl = normalizeUrl(item.link);
+    if (existingSourceUrls.has(normUrl)) {
+      return false; // Already scraped previously!
+    }
     return true;
   });
 
-  const selectedCandidates = candidates.slice(0, limit);
+  // Sort fresh candidates by publication date descending (newest first)
+  freshCandidates.sort((a, b) => {
+    const timeA = a.pubDate ? new Date(a.pubDate).getTime() : 0;
+    const timeB = b.pubDate ? new Date(b.pubDate).getTime() : 0;
+    return timeB - timeA;
+  });
+
+  console.log(`[Scraper] Found ${freshCandidates.length} fresh (unscraped) articles.`);
+
+  const selectedCandidates = freshCandidates.slice(0, limit);
 
   if (selectedCandidates.length === 0) {
     return {
@@ -92,6 +142,7 @@ export async function runNewsScraper(options: ScrapeOptions = {}): Promise<Scrap
           excerpt: translated.excerpt,
           published: false,
           publishedAt: null,
+          imageUrl: translated.imageUrl,
         });
       } else {
         const created = await db.orm.public.News.create({
@@ -111,6 +162,7 @@ export async function runNewsScraper(options: ScrapeOptions = {}): Promise<Scrap
           excerpt: created.excerpt,
           published: created.published,
           publishedAt: created.publishedAt,
+          imageUrl: translated.imageUrl,
         });
       }
     } catch (err) {

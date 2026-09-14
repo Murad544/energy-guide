@@ -37,6 +37,7 @@ async function main() {
       console.log(`\n[${idx + 1}] ${a.title}`);
       console.log(`    Slug: ${a.slug}`);
       console.log(`    Status: ${a.published ? "Published" : "Draft"}`);
+      console.log(`    Image: ${a.imageUrl || "None"}`);
       console.log(`    Excerpt: ${a.excerpt}`);
     }
   }

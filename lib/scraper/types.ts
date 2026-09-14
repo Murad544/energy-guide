@@ -6,6 +6,7 @@ export interface RawFeedArticle {
   snippet: string;
   sourceName: string;
   pubDate?: string;
+  imageUrl?: string;
 }
 
 export interface TranslatedArticle {
@@ -14,6 +15,7 @@ export interface TranslatedArticle {
   contentJson: JSONContent;
   sourceUrl: string;
   originalTitle: string;
+  imageUrl?: string;
 }
 
 export interface ScraperResult {
@@ -27,5 +29,6 @@ export interface ScraperResult {
     excerpt: string | null;
     published: boolean;
     publishedAt: string | null;
+    imageUrl?: string;
   }>;
 }

@@ -106,6 +106,8 @@ Only return the raw JSON object, without markdown backticks or commentary.
 
       const contentJson = buildTiptapDocument({
         paragraphs,
+        imageUrl: raw.imageUrl,
+        imageAlt: title,
         sourceUrl: raw.link,
         sourceName: raw.sourceName,
       });
@@ -116,6 +118,7 @@ Only return the raw JSON object, without markdown backticks or commentary.
         contentJson,
         sourceUrl: raw.link,
         originalTitle: raw.title,
+        imageUrl: raw.imageUrl,
       };
     } catch (err) {
       lastError = err as Error;
@@ -148,6 +151,8 @@ function createFallbackArticle(raw: RawFeedArticle): TranslatedArticle {
 
   const contentJson = buildTiptapDocument({
     paragraphs,
+    imageUrl: raw.imageUrl,
+    imageAlt: title,
     sourceUrl: raw.link,
     sourceName: raw.sourceName,
   });
@@ -158,5 +163,6 @@ function createFallbackArticle(raw: RawFeedArticle): TranslatedArticle {
     contentJson,
     sourceUrl: raw.link,
     originalTitle: raw.title,
+    imageUrl: raw.imageUrl,
   };
 }

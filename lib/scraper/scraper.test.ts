@@ -42,5 +42,29 @@ describe("Scraper Helpers", () => {
       const normalized = normalizeTiptapContent(doc);
       expect(normalized).toEqual(doc);
     });
+
+    it("inserts an image node at the start when imageUrl is provided", () => {
+      const doc = buildTiptapDocument({
+        paragraphs: ["Əsas abzas"],
+        imageUrl: "https://example.com/solar-panel.jpg",
+        imageAlt: "Günəş paneli",
+      });
+
+      expect(doc.type).toBe("doc");
+      expect(doc.content?.[0]).toEqual({
+        type: "image",
+        attrs: {
+          src: "https://example.com/solar-panel.jpg",
+          alt: "Günəş paneli",
+        },
+      });
+      expect(doc.content?.[1]).toEqual({
+        type: "paragraph",
+        content: [{ type: "text", text: "Əsas abzas" }],
+      });
+
+      const normalized = normalizeTiptapContent(doc);
+      expect(normalized).toEqual(doc);
+    });
   });
 });

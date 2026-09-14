@@ -1,0 +1,53 @@
+name: Daily Solar News Scraper
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC (10:00 Baku time)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of articles to scrape'
+        required: false
+        default: '10'
+      dry_run:
+        description: 'Dry run (test without saving to DB)'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  scrape-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Emit Prisma contract
+        run: pnpm prisma contract emit
+
+      - name: Run Solar News Scraper
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          FLAGS="--count=${{ github.event.inputs.count || '10' }}"
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            FLAGS="$FLAGS --dry-run"
+          fi
+          pnpm tsx scripts/test-scraper.ts $FLAGS

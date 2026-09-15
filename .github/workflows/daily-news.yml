@@ -2,8 +2,8 @@ name: Daily Solar News Scraper
 
 on:
   schedule:
-    # Runs every day at 06:00 UTC (10:00 Baku time)
-    - cron: '0 6 * * *'
+    # 07:40 UTC = 11:40 Baku
+    - cron: '40 7 * * *'
   workflow_dispatch:
     inputs:
       count:

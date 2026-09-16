@@ -175,14 +175,17 @@ body {
 .skip-link {
   position: fixed;
   left: 1rem;
-  top: -5rem;
+  top: 1rem;
+  clip-path: inset(50%);
+  pointer-events: none;
   z-index: 100;
   padding: 1rem;
   background: #d9f279;
   color: #16392f;
 }
 .skip-link:focus {
-  top: 1rem;
+  clip-path: none;
+  pointer-events: auto;
 }
 .feature-card {
   transition:
@@ -229,7 +232,56 @@ body {
     transform: rotate(360deg);
   }
 }
+.page-loader {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 4px;
+  overflow: hidden;
+  pointer-events: none;
+  background: #dce4da;
+}
+.page-loader-bar {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0.15);
+  transform-origin: left;
+  background: linear-gradient(90deg, #367957, #d9f279);
+  animation: page-loading 12s cubic-bezier(0.12, 0.8, 0.2, 1) forwards;
+}
+@keyframes page-loading {
+  from {
+    transform: scaleX(0.15);
+  }
+  to {
+    transform: scaleX(0.92);
+  }
+}
+.page-loading-state {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+}
+.page-loading-message {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: #5e7067;
+  font-size: 0.875rem;
+}
+.page-loading-spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid #dce4da;
+  border-top-color: #367957;
+  border-radius: 50%;
+  animation: solar-turn 0.8s linear infinite;
+}
 @media (prefers-reduced-motion: reduce) {
+  .page-loader-bar {
+    transform: scaleX(1);
+  }
   html {
     scroll-behavior: auto;
   }

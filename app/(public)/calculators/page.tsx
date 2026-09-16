@@ -10,7 +10,10 @@ export default async function CalculatorsPage({
   return (
     <>
       <PageHeading {...siteCopy.calculators} />
-      <CalculatorWorkspace key={typeof tool === "string" ? tool : "pv"} initialTool={typeof tool === "string" ? tool : "pv"} />
+      <CalculatorWorkspace
+        key={typeof tool === "string" ? tool : "pv"}
+        initialTool={typeof tool === "string" ? tool : "pv"}
+      />
     </>
   );
 }

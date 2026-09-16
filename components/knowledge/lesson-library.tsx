@@ -15,21 +15,41 @@ type Lesson = {
 export function LessonLibrary({ lessons }: { lessons: Lesson[] }) {
   const [query, setQuery] = useState("");
   const input = useRef<HTMLInputElement>(null);
-  const terms = query.trim().toLocaleLowerCase("az").split(/\s+/).filter(Boolean);
+  const terms = query
+    .trim()
+    .toLocaleLowerCase("az")
+    .split(/\s+/)
+    .filter(Boolean);
   const filtered = lessons.filter((lesson) => {
-    const text = `${lesson.title} ${lesson.intro} ${lesson.number}`.toLocaleLowerCase("az");
+    const text =
+      `${lesson.title} ${lesson.intro} ${lesson.number}`.toLocaleLowerCase(
+        "az",
+      );
     return terms.every((term) => text.includes(term));
   });
 
   if (!lessons.length) {
-    return <p className="py-12 text-center text-ink-soft">Hazırda nəşr edilmiş dərs yoxdur.</p>;
+    return (
+      <p className="py-12 text-center text-ink-soft">
+        Hazırda nəşr edilmiş dərs yoxdur.
+      </p>
+    );
   }
 
   return (
     <>
-      <label htmlFor="lesson-search" className="mb-2 block text-sm font-semibold">Dərslərdə axtar</label>
+      <label
+        htmlFor="lesson-search"
+        className="mb-2 block text-sm font-semibold"
+      >
+        Dərslərdə axtar
+      </label>
       <div className="relative">
-        <Search size={20} aria-hidden="true" className="pointer-events-none absolute left-4 top-4 text-ink-soft" />
+        <Search
+          size={20}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-4 top-4 text-ink-soft"
+        />
         <input
           ref={input}
           id="lesson-search"
@@ -42,17 +62,30 @@ export function LessonLibrary({ lessons }: { lessons: Lesson[] }) {
         />
       </div>
       <div className="mb-6 mt-3 flex min-h-11 items-center justify-between gap-4">
-        <p id="lesson-count" role="status" className="text-sm text-ink-soft">{filtered.length} dərs tapıldı</p>
+        <p id="lesson-count" role="status" className="text-sm text-ink-soft">
+          {filtered.length} dərs tapıldı
+        </p>
         {query && (
-          <button type="button" className="min-h-11 rounded-lg px-3 text-sm font-semibold text-teal hover:bg-paper-dim" onClick={() => { setQuery(""); input.current?.focus(); }}>Axtarışı təmizlə</button>
+          <button
+            type="button"
+            className="min-h-11 rounded-lg px-3 text-sm font-semibold text-teal hover:bg-paper-dim"
+            onClick={() => {
+              setQuery("");
+              input.current?.focus();
+            }}
+          >
+            Axtarışı təmizlə
+          </button>
         )}
       </div>
-      {filtered.length ? filtered.map((lesson) => (
-        <LessonSection key={lesson.id} {...lesson} />
-      )) : (
+      {filtered.length ? (
+        filtered.map((lesson) => <LessonSection key={lesson.id} {...lesson} />)
+      ) : (
         <div className="rounded-xl border bg-white p-8 text-center">
           <h2 className="text-lg font-semibold">Uyğun dərs tapılmadı</h2>
-          <p className="mt-2 text-sm leading-6 text-ink-soft">Başqa açar söz sınayın və ya axtarışı təmizləyin.</p>
+          <p className="mt-2 text-sm leading-6 text-ink-soft">
+            Başqa açar söz sınayın və ya axtarışı təmizləyin.
+          </p>
         </div>
       )}
     </>

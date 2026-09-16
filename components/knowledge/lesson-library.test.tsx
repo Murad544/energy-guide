@@ -4,8 +4,20 @@ import { LessonLibrary } from "./lesson-library";
 
 afterEach(cleanup);
 const lessons = [
-  { id: "1", number: 1, slug: "isiq", title: "İşıq və enerji", intro: "Günəş panelinin işi" },
-  { id: "2", number: 2, slug: "batareya", title: "Batareya", intro: "Ehtiyat enerji" },
+  {
+    id: "1",
+    number: 1,
+    slug: "isiq",
+    title: "İşıq və enerji",
+    intro: "Günəş panelinin işi",
+  },
+  {
+    id: "2",
+    number: 2,
+    slug: "batareya",
+    title: "Batareya",
+    intro: "Ehtiyat enerji",
+  },
 ];
 
 it("filters using Azerbaijani casing and restores results and focus when cleared", () => {
@@ -24,8 +36,12 @@ it("filters using Azerbaijani casing and restores results and focus when cleared
 
 it("searches descriptions and shows the publication empty state", () => {
   const { rerender } = render(<LessonLibrary lessons={lessons} />);
-  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "ehtiyat" } });
-  expect(screen.getByRole("link").getAttribute("href")).toBe("/knowledge/batareya");
+  fireEvent.change(screen.getByRole("searchbox"), {
+    target: { value: "ehtiyat" },
+  });
+  expect(screen.getByRole("link").getAttribute("href")).toBe(
+    "/knowledge/batareya",
+  );
   rerender(<LessonLibrary lessons={[]} />);
   expect(screen.getByText("Hazırda nəşr edilmiş dərs yoxdur.")).toBeTruthy();
   expect(screen.queryByRole("searchbox")).toBeNull();

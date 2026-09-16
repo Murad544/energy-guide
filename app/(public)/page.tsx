@@ -1,4 +1,6 @@
 import { Lede } from "@/components/home/lede";
+import Link from "next/link";
+import { GoalSelector } from "@/components/home/goal-selector";
 import { SplashHero } from "@/components/home/splash-hero";
 import { BookOpen, Calculator, Workflow } from "lucide-react";
 
@@ -7,16 +9,19 @@ const highlights = [
     icon: BookOpen,
     title: "Sadə dildə bilik",
     text: "Təməldən praktik seçimə",
+    href: "/knowledge",
   },
   {
     icon: Calculator,
     title: "5 praktik hesablayıcı",
     text: "Evinizə uyğun ilkin hesab",
+    href: "/calculators",
   },
   {
     icon: Workflow,
     title: "İnteraktiv sistem xəritəsi",
     text: "Enerjinin yolunu izləyin",
+    href: "/calculators?tool=flow",
   },
 ];
 export default function HomePage() {
@@ -25,9 +30,10 @@ export default function HomePage() {
       <SplashHero />
       <section className="border-b bg-paper-dim/60">
         <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 sm:grid-cols-3 md:px-10">
-          {highlights.map(({ icon: Icon, title, text }) => (
-            <div
-              className="flex items-center gap-4 sm:justify-center"
+          {highlights.map(({ icon: Icon, title, text, href }) => (
+            <Link
+              href={href}
+              className="flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-paper-dim sm:justify-center"
               key={title}
             >
               <Icon
@@ -39,10 +45,11 @@ export default function HomePage() {
                 <p className="text-sm font-semibold">{title}</p>
                 <p className="mt-1 text-xs text-ink-soft">{text}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
+      <GoalSelector />
       <Lede />
     </>
   );

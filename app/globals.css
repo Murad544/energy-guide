@@ -199,6 +199,7 @@ body {
   box-shadow: 0 14px 32px -16px #16392f30;
 }
 .solar-scene {
+  perspective: 1000px;
   background-image:
     radial-gradient(ellipse at 80% 15%, #436a4240, transparent 60%),
     linear-gradient(#ffffff04 1px, transparent 1px),
@@ -216,6 +217,51 @@ body {
 }
 .solar-rays {
   animation: solar-turn 55s linear infinite;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .solar-illustration {
+    animation: solar-float 8s ease-in-out infinite;
+    transform-origin: 50% 65%;
+  }
+  .home-depth-card {
+    transform-style: preserve-3d;
+    transition:
+      transform 350ms ease,
+      box-shadow 350ms ease,
+      border-color 350ms ease;
+  }
+  .home-depth-icon {
+    transition:
+      transform 350ms ease,
+      box-shadow 350ms ease;
+  }
+  .home-depth-card:focus-visible {
+    transform: perspective(900px) translateY(-5px) rotateX(3deg) rotateY(-3deg);
+    box-shadow: 8px 18px 32px -20px #16392f50;
+  }
+  .home-depth-card:focus-visible .home-depth-icon {
+    transform: translateZ(24px) rotate(-5deg);
+    box-shadow: 0 10px 18px -12px #16392f60;
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home-depth-card:hover {
+    transform: perspective(900px) translateY(-5px) rotateX(3deg) rotateY(-3deg);
+    box-shadow: 8px 18px 32px -20px #16392f50;
+  }
+  .home-depth-card:hover .home-depth-icon {
+    transform: translateZ(24px) rotate(-5deg);
+    box-shadow: 0 10px 18px -12px #16392f60;
+  }
+}
+@keyframes solar-float {
+  0%,
+  100% {
+    transform: translateY(3px) rotateX(3deg) rotateY(-4deg);
+  }
+  50% {
+    transform: translateY(-7px) rotateX(-2deg) rotateY(4deg);
+  }
 }
 @keyframes enter {
   from {

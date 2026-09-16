@@ -46,7 +46,7 @@ export function SplashHero() {
           </div>
           <svg
             viewBox="0 0 480 345"
-            className="relative z-10 my-4 w-full"
+            className="solar-illustration relative z-10 my-4 w-full"
             role="img"
             aria-label="Günəş işığı panellərə düşür, istehsal olunan elektrik evə ötürülür"
           >

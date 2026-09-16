@@ -50,10 +50,10 @@ const calculators = [
     component: SolarSimulator,
   },
 ];
-export function CalculatorWorkspace() {
+export function CalculatorWorkspace({ initialTool = "pv" }: { initialTool?: string }) {
   return (
     <Tabs.Root
-      defaultValue="pv"
+      defaultValue={calculators.some(({ id }) => id === initialTool) ? initialTool : "pv"}
       orientation="vertical"
       className="mx-auto grid max-w-7xl gap-6 px-5 py-10 md:px-10 lg:grid-cols-[240px_minmax(0,1fr)] lg:py-14"
     >

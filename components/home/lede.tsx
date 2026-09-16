@@ -26,12 +26,12 @@ export function Lede() {
           const { href, icon: Icon, action } = destinations[index];
           return (
             <Link
-              className="feature-card group flex flex-col rounded-xl border bg-white p-7"
+              className="feature-card home-depth-card group flex flex-col rounded-xl border bg-white p-7"
               href={href}
               key={item.number}
             >
               <div className="flex items-center justify-between">
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-paper-dim text-teal">
+                <span className="home-depth-icon flex h-12 w-12 items-center justify-center rounded-xl bg-paper-dim text-teal">
                   <Icon size={23} />
                 </span>
                 <span className="text-xs font-medium text-ink-soft">

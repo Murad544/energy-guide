@@ -3,35 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --background: 42 52% 96%;
-  --foreground: 210 33% 14%;
-  --card: 42 47% 98%;
-  --card-foreground: 210 33% 14%;
-  --primary: 36 79% 57%;
-  --primary-foreground: 210 33% 14%;
-  --secondary: 40 30% 91%;
-  --secondary-foreground: 210 33% 14%;
-  --muted: 40 30% 91%;
-  --muted-foreground: 209 16% 35%;
-  --border: 41 27% 79%;
+  --background: 90 29% 97%;
+  --foreground: 163 44% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 163 44% 15%;
+  --primary: 73 82% 71%;
+  --primary-foreground: 163 44% 15%;
+  --secondary: 93 26% 93%;
+  --secondary-foreground: 163 44% 15%;
+  --muted: 93 26% 93%;
+  --muted-foreground: 147 9% 40%;
+  --border: 102 16% 87%;
   --radius: 0.35rem;
 }
 
 * {
-  border-color: #d8d0bd;
+  border-color: #dce4da;
 }
 html {
   scroll-behavior: smooth;
 }
 body {
   min-height: 100vh;
-  background: #faf7ef;
-  color: #182430;
+  background: #f8faf6;
+  color: #16392f;
   font-family: Inter, system-ui, sans-serif;
 }
 ::selection {
-  background: #e8a33d;
-  color: #182430;
+  background: #d9f279;
+  color: #16392f;
 }
 .editorial-grid {
   background-image:
@@ -55,7 +55,7 @@ body {
   outline: none;
 }
 .tiptap:focus {
-  box-shadow: inset 3px 0 0 #e8a33d;
+  box-shadow: inset 3px 0 0 #d9f279;
 }
 .tiptap p,
 .rich-text p {
@@ -65,14 +65,14 @@ body {
 .tiptap h2,
 .rich-text h2 {
   margin: 2rem 0 1rem;
-  font-family: Georgia, serif;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 1.875rem;
   line-height: 1.2;
 }
 .tiptap h3,
 .rich-text h3 {
   margin: 1.75rem 0 0.75rem;
-  font-family: Georgia, serif;
+  font-family: Inter, system-ui, sans-serif;
   font-size: 1.5rem;
   line-height: 1.25;
 }
@@ -95,7 +95,7 @@ body {
 .tiptap blockquote,
 .rich-text blockquote {
   margin: 1.5rem 0;
-  border-left: 3px solid #e8a33d;
+  border-left: 3px solid #d9f279;
   padding: 0.5rem 0 0.5rem 1.25rem;
   color: #53616d;
 }
@@ -107,18 +107,18 @@ body {
 .tiptap pre,
 .rich-text pre {
   overflow-x: auto;
-  background: #182430;
+  background: #16392f;
   padding: 1rem;
-  color: #faf7ef;
+  color: #f8faf6;
 }
 .tiptap hr,
 .rich-text hr {
   margin: 2rem 0;
-  border-color: #d8d0bd;
+  border-color: #dce4da;
 }
 .tiptap a,
 .rich-text a {
-  color: #9a5b08;
+  color: #37694d;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -138,7 +138,7 @@ body {
   border-radius: 0.35rem;
 }
 .tiptap img.ProseMirror-selectednode {
-  outline: 3px solid #e8a33d;
+  outline: 3px solid #d9f279;
   outline-offset: 3px;
 }
 .tiptap > :first-child,
@@ -155,4 +155,91 @@ body {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+@layer components {
+  .eyebrow {
+    @apply flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-teal;
+  }
+  .button-primary {
+    @apply inline-flex min-h-12 items-center justify-center gap-4 rounded-lg bg-ink px-6 py-3.5 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-teal hover:shadow-lg;
+  }
+  .button-secondary {
+    @apply inline-flex min-h-12 items-center justify-center gap-4 rounded-lg border bg-white px-6 py-3.5 text-sm font-semibold transition duration-200 hover:-translate-y-0.5 hover:border-teal;
+  }
+}
+:focus-visible {
+  outline: 2px solid #367957;
+  outline-offset: 4px;
+}
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -5rem;
+  z-index: 100;
+  padding: 1rem;
+  background: #d9f279;
+  color: #16392f;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+.feature-card {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: #91ab91;
+  box-shadow: 0 14px 32px -16px #16392f30;
+}
+.solar-scene {
+  background-image:
+    radial-gradient(ellipse at 80% 15%, #436a4240, transparent 60%),
+    linear-gradient(#ffffff04 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff04 1px, transparent 1px);
+  background-size:
+    auto,
+    28px 28px,
+    28px 28px;
+}
+.animate-enter {
+  animation: enter 650ms ease-out both;
+}
+.solar-scene.animate-enter {
+  animation-delay: 100ms;
+}
+.solar-rays {
+  animation: solar-turn 55s linear infinite;
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes solar-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .feature-card:hover {
+    transform: none;
+  }
 }

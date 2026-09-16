@@ -15,14 +15,14 @@ export function LessonSection({
 }: LessonSectionProps) {
   return (
     <Link
-      className="group grid gap-5 border-t py-8 transition-colors hover:bg-paper-dim md:grid-cols-[100px_1fr_auto] md:items-center md:px-5"
+      className="feature-card group mb-4 grid gap-4 rounded-xl border bg-white p-6 md:grid-cols-[70px_1fr_auto] md:items-center md:p-8"
       href={`/knowledge/${slug}`}
     >
-      <span className="font-serif text-3xl text-amber-dim">
+      <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-paper-dim text-lg font-semibold text-teal">
         {String(number).padStart(2, "0")}
       </span>
       <span>
-        <strong className="block font-serif text-2xl font-normal group-hover:text-copper">
+        <strong className="block text-xl font-semibold group-hover:text-copper">
           {title}
         </strong>
         <span className="mt-2 block leading-7 text-ink-soft">{intro}</span>

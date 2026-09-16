@@ -31,8 +31,8 @@ export const siteCopy = {
       },
       {
         number: "03",
-        title: "Daha düzgün seçin",
-        text: "Təklifləri eyni meyarlarla yoxlayın və gizli fərziyyələri görün.",
+        title: "Yenilikləri izləyin",
+        text: "Günəş enerjisi, texnologiya və bazar haqqında yeniliklərdən xəbərdar olun.",
       },
     ],
   },

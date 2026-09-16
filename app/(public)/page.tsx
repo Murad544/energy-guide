@@ -1,28 +1,55 @@
 import { Lede } from "@/components/home/lede";
+import Link from "next/link";
+import { GoalSelector } from "@/components/home/goal-selector";
 import { SplashHero } from "@/components/home/splash-hero";
-import { siteCopy } from "@/lib/copy/az";
+import { BookOpen, Calculator, Workflow } from "lucide-react";
 
+const highlights = [
+  {
+    icon: BookOpen,
+    title: "Sadə dildə bilik",
+    text: "Təməldən praktik seçimə",
+    href: "/knowledge",
+  },
+  {
+    icon: Calculator,
+    title: "5 praktik hesablayıcı",
+    text: "Evinizə uyğun ilkin hesab",
+    href: "/calculators",
+  },
+  {
+    icon: Workflow,
+    title: "İnteraktiv sistem xəritəsi",
+    text: "Enerjinin yolunu izləyin",
+    href: "/calculators?tool=flow",
+  },
+];
 export default function HomePage() {
   return (
     <>
       <SplashHero />
-      <section className="bg-ink text-paper">
-        <div className="mx-auto grid max-w-7xl grid-cols-3 px-5 py-10 md:px-10">
-          {siteCopy.home.stats.map((stat) => (
-            <div
-              className="border-r px-4 last:border-0 md:px-8"
-              key={stat.label}
+      <section className="border-b bg-paper-dim/60">
+        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 sm:grid-cols-3 md:px-10">
+          {highlights.map(({ icon: Icon, title, text, href }) => (
+            <Link
+              href={href}
+              className="flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-paper-dim sm:justify-center"
+              key={title}
             >
-              <strong className="block font-serif text-4xl text-amber md:text-6xl">
-                {stat.value}
-              </strong>
-              <span className="mt-2 block text-xs text-paper/60 md:text-sm">
-                {stat.label}
-              </span>
-            </div>
+              <Icon
+                size={23}
+                strokeWidth={1.5}
+                className="shrink-0 text-teal"
+              />
+              <div>
+                <p className="text-sm font-semibold">{title}</p>
+                <p className="mt-1 text-xs text-ink-soft">{text}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
+      <GoalSelector />
       <Lede />
     </>
   );

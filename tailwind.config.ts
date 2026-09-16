@@ -10,15 +10,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: { DEFAULT: "#FAF7EF", dim: "#F1ECDF" },
-        amber: { DEFAULT: "#E8A33D", dim: "#C9862A" },
-        copper: "#B4552B",
-        teal: "#3F8564",
-        ink: { DEFAULT: "#182430", soft: "#4B5A68" },
-        line: { DEFAULT: "#D8D0BD", navy: "rgba(255,255,255,0.14)" },
+        paper: { DEFAULT: "#F8FAF6", dim: "#EDF2E9" },
+        amber: { DEFAULT: "#D9F279", dim: "#48704A" },
+        copper: "#37694D",
+        teal: "#367957",
+        ink: { DEFAULT: "#16392F", soft: "#5E7067" },
+        line: { DEFAULT: "#DCE4DA", navy: "rgba(255,255,255,0.14)" },
       },
       fontFamily: {
-        serif: ['"Source Serif 4"', "Georgia", "serif"],
+        serif: ["Inter", "system-ui", "sans-serif"],
         sans: ["Inter", "system-ui", "sans-serif"],
       },
     },

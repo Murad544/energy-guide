@@ -22,6 +22,13 @@ interactive login.
 
 The public site is available at `/`; the single-account admin panel starts at `/login`.
 
+## Tests
+
+Run the test suite locally with `pnpm test:run`.
+The `Tests` GitHub Actions workflow runs the suite on pull requests targeting
+`main`, using Node.js 24 and pnpm 12.3.4. New commits cancel older runs for the
+same pull request. No repository secrets or running database are required.
+
 ## Getting Started
 
 First, run the development server:

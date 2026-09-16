@@ -14,7 +14,7 @@ export default async function NewsPage() {
         {articles.length ? (
           articles.map((article) => (
             <Link
-              className="group border bg-paper p-6 transition-colors hover:bg-white"
+              className="feature-card group rounded-xl border bg-white p-7"
               href={`/news/${article.slug}`}
               key={article.id}
             >
@@ -23,7 +23,7 @@ export default async function NewsPage() {
                   article.publishedAt ?? article.createdAt,
                 ).toLocaleDateString("az-AZ")}
               </time>
-              <h2 className="mt-4 font-serif text-3xl group-hover:underline">
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight group-hover:text-teal">
                 {article.title}
               </h2>
               {article.excerpt ? (

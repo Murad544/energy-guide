@@ -6,7 +6,14 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatNumberAz(value: number, digits = 1) {
-  return new Intl.NumberFormat("az-AZ", {
+  // Some browsers lack Azerbaijani ICU data and fall back to English.
+  // Map explicit separators so server and browser output always agree.
+  return new Intl.NumberFormat("en-US", {
     maximumFractionDigits: digits,
-  }).format(value);
+  })
+    .formatToParts(value)
+    .map(({ type, value: part }) =>
+      type === "group" ? "." : type === "decimal" ? "," : part,
+    )
+    .join("");
 }

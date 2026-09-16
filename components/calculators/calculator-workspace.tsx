@@ -86,7 +86,7 @@ export function CalculatorWorkspace({
       <div className="min-w-0">
         {calculators.map(({ id, component: Component }) => (
           <Tabs.Content
-            forceMount
+            forceMount={id === "flow" ? undefined : true}
             value={id}
             key={id}
             className="animate-enter data-[state=inactive]:hidden"

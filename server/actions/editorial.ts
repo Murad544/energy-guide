@@ -232,3 +232,22 @@ export async function deleteNewsAction(
   revalidatePath("/dashboard/news");
   revalidatePath("/news");
 }
+
+export async function deleteNewsBatchAction(
+  ids: string[],
+): Promise<ActionResult> {
+  await requireSession();
+  try {
+    const selectedIds = z
+      .array(z.string().trim().min(1).max(200))
+      .min(1)
+      .parse(ids);
+    await newsService.deleteMany([...new Set(selectedIds)]);
+  } catch (error) {
+    return failure(error);
+  }
+  revalidatePath("/dashboard/news");
+  revalidatePath("/news");
+  revalidatePath("/news/[slug]", "page");
+  return { ok: true, data: null };
+}

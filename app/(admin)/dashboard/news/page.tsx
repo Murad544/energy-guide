@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { DeleteButton } from "@/components/admin/delete-button";
-import { deleteNewsAction } from "@/server/actions/editorial";
+import { NewsList } from "@/components/admin/news-list";
 import { newsService } from "@/server/services/news.service";
 
 export const dynamic = "force-dynamic";
@@ -23,48 +22,15 @@ export default async function NewsAdminPage() {
           Yeni xəbər
         </Link>
       </div>
-      <div className="mt-10 overflow-hidden border bg-paper">
-        {articles.length ? (
-          articles.map((article) => (
-            <div
-              className="grid gap-3 border-b p-4 last:border-0 md:grid-cols-[1fr_120px_120px] md:items-center"
-              key={article.id}
-            >
-              <div>
-                <strong>{article.title}</strong>
-                <span className="mt-1 block text-sm text-ink-soft">
-                  /{article.slug} ·{" "}
-                  {new Date(article.updatedAt).toLocaleDateString("az-AZ")}
-                </span>
-              </div>
-              <span
-                className={
-                  article.published
-                    ? "text-sm text-teal"
-                    : "text-sm text-copper"
-                }
-              >
-                {article.published ? "Nəşrdə" : "Qaralama"}
-              </span>
-              <div className="flex gap-4">
-                <Link
-                  className="text-sm font-semibold hover:underline"
-                  href={`/dashboard/news/${article.id}/edit`}
-                >
-                  Redaktə
-                </Link>
-                <form>
-                  <DeleteButton
-                    action={deleteNewsAction.bind(null, article.id)}
-                  />
-                </form>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="p-8 text-ink-soft">Hələ xəbər yoxdur.</p>
-        )}
-      </div>
+      <NewsList
+        articles={articles.map((article) => ({
+          id: article.id,
+          title: article.title,
+          slug: article.slug,
+          published: article.published,
+          updatedAt: new Date(article.updatedAt).toLocaleDateString("az-AZ"),
+        }))}
+      />
     </>
   );
 }

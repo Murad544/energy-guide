@@ -7,7 +7,7 @@ export function DeleteButton({
 }) {
   return (
     <button
-      className="text-sm font-semibold text-copper hover:underline"
+      className="text-sm font-semibold text-red-600 hover:underline"
       formAction={action}
       onClick={(event) => {
         if (!window.confirm("Bu qeydi silmək istədiyinizə əminsiniz?"))

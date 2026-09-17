@@ -60,8 +60,13 @@ Instructions:
 Only return the raw JSON object, without markdown backticks or commentary.
 `.trim();
 
-  // Try gemini-2.5-flash first, fallback to gemini-1.5-flash if needed
-  const models = ['gemini-3.6-flash'];
+  // Prefer capability, then step down when a model is limited or unavailable.
+  const models = [
+    'gemini-3.6-flash',
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-flash-lite',
+  ];
   let lastError: Error | null = null;
 
   for (const model of models) {
